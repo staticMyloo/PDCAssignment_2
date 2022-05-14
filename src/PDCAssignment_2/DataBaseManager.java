@@ -22,12 +22,14 @@ public final class DataBaseManager
 {
     private static final String USER_NAME = "pdc"; //your DB username
     private static final String PASSWORD = "123"; //your DB password
-    private static final String URL = "jdbc:derby:BookingDataBase;create=true";  //url of the DB host
+    private static final String URL = "jdbc:derby:BookingDataBase; create=true";  //url of the DB host
 
     Connection conn;
+    //Statement statement;
 
     public DataBaseManager() {
         establishConnection();
+        
         try {
             createTestTable();
         } catch (SQLException ex) {
@@ -38,7 +40,7 @@ public final class DataBaseManager
     public static void main(String[] args) throws SQLException {
         DataBaseManager dbManager = new DataBaseManager();
         
-        System.out.println(dbManager.getConnection());
+        //System.out.println(dbManager.getConnection());
     }
 
     public Connection getConnection() {
@@ -47,15 +49,25 @@ public final class DataBaseManager
 
     public void createTestTable() throws SQLException
     {
-            //conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             Statement statement = conn.createStatement();
             System.out.println("Checking if table exists.");
             String tableName = "Test";
             if(!tableExists(tableName))
             {
+                System.out.println("Creating table");
                 statement.executeUpdate("CREATE TABLE "+ tableName +" (userid VARCHAR(12), password VARCHAR(12), score INT)");
             }
+            else
+            {
+                System.out.println("Table exists.");
+            }
+            //statement = conn.createStatement();
+            System.out.println("Attempting to insert values.");
+            statement.addBatch("INSERT INTO Test VALUES('hello', 'hello', 10)");
+            statement.executeBatch();
             statement.close();
+            closeConnections();
     }
     
 
@@ -101,7 +113,6 @@ public final class DataBaseManager
                 String getTable = rs.getString("TABLE_NAME");
                 if (table.compareToIgnoreCase(getTable) == 0) 
                 {
-                    System.out.println("Table exists.");
                     flag = true;
                 }
             }
