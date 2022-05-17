@@ -8,10 +8,16 @@ package PDCAssignment_2;
  *
  * @author myles
  */
-public class Data 
+public abstract class Plane 
 {
-    String userName;
-    String passWord;
-    String passPortNo;
-    boolean loginFlag = false;
+    protected String name;
+    
+    public Plane(String name)
+    {
+        this.name = name;
+    } 
+    
+    public abstract Plane getPlane();
+    public abstract Seat[][] getSeats();
+    public abstract String getName();
 }

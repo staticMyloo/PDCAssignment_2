@@ -10,8 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 
 /**
@@ -26,20 +25,19 @@ public final class DataBaseManager
 
     Connection conn;
     //Statement statement;
+    TripList trips;
 
     public DataBaseManager() {
-        establishConnection();
         
         try {
-            createTestTable();
-        } catch (SQLException ex) {
-            Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            establishConnection();
+            createCustomerTable();
+            createTripList();
+        } catch (SQLException ex) {}
     }
 
     public static void main(String[] args) throws SQLException {
         DataBaseManager dbManager = new DataBaseManager();
-        
         //System.out.println(dbManager.getConnection());
     }
 
@@ -47,33 +45,142 @@ public final class DataBaseManager
         return this.conn;
     }
 
-    public void createTestTable() throws SQLException
+    public Data checkUser(String userName, String passWord, String passPortNo)
+    {   
+        
+            Data data = new Data();
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT userid, password FROM CUSTOMERS WHERE userid = '"+userName+"'");
+            
+            if(rs.next())
+            {
+                System.out.println("result set successful");
+                String pass = rs.getString("password");
+                if(passWord.trim().compareTo(pass.trim()) == 0)
+                {
+                    System.out.println("login accepted");
+                    data.loginFlag = true;
+                }
+                else
+                {
+                    //System.out.println("login rejected");
+                    data.loginFlag = false;
+                }
+            }
+            else
+            {
+                System.out.println("no such user");
+                statement.executeUpdate("INSERT INTO CUSTOMERS VALUES('"+userName.trim()+"', '"+passWord.trim()+"', '"+passPortNo.trim()+"')");
+                data.loginFlag = true;
+            }
+            
+        } catch (SQLException ex) {}
+            return data;
+    }
+    
+    public ArrayList<Trip> getSelectedFlights(String origin, String dest, String time)
     {
-            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+        ArrayList<Trip> set = new ArrayList<>();
+        trips = new TripList();
+        try
+        {
+            System.out.println(origin+" "+dest+" "+time);
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT origin, destination, time FROM TRIPS "
+                    + "WHERE origin = '"+origin+"' "
+                            + "AND destination = '"+dest+"' "
+                                    + "AND time = '"+time+"'");
+                    
+            
+                
+            while (rs.next()) 
+            {
+                System.out.println("rs successful");
+                String tempOrg = rs.getString("origin");
+                String tempDest = rs.getString("destination");
+                String tempTime = rs.getString("time");
+
+                for (int i = 0; i < trips.getTripList().size(); i++) 
+                {
+                    Trip temp = (Trip) trips.getTripList().get(i);
+                    if (temp.validateTrip(tempOrg, tempDest, tempTime)) 
+                    {
+                        set.add(temp);
+                        trips.getTripList().remove(temp);
+                    }
+                }
+            }
+             rs.close();
+        }
+        catch(SQLException e)
+        {}
+        
+        return set;
+        
+    }
+    
+    public void createTripList() throws SQLException
+    {
+        Statement statement = conn.createStatement();
+        String tableName = "TRIPS";
+        
+        if(!tableExists(tableName))
+        {
+            trips = new TripList();
+            statement.executeUpdate("CREATE TABLE "+ tableName +" (origin VARCHAR(12), destination VARCHAR(12), triplength VARCHAR(12), "
+                    + "time VARCHAR(12), date VARCHAR(12), cost INT)");
+            
+            for(int i = 0; i < trips.getTripList().size(); i++)
+            {
+               Trip temp = (Trip) trips.getTripList().get(i);
+               String tempOrigin = temp.getOrigin();
+               String tempDest = temp.getDestination();
+               String tempLength = temp.getTripLength();
+               String tempTime = temp.getTime();
+               String tempDate = temp.getTripDate();
+               int tempCost = temp.getCost();
+               
+               String insertTrip = "INSERT INTO TRIPS VALUES ('"+tempOrigin+"', '"+tempDest+"', '"+tempLength+"', '"+tempTime+"', '"+tempDate+"',"
+                       + " "+tempCost+")";
+               
+                System.out.println(insertTrip);
+               
+                statement.addBatch(insertTrip);
+                
+            }
+            statement.executeBatch();
+        }
+        statement.close();
+    }
+    
+    public void createCustomerTable() throws SQLException
+    {
+            
             Statement statement = conn.createStatement();
             System.out.println("Checking if table exists.");
-            String tableName = "Test";
+            String tableName = "CUSTOMERS";
             if(!tableExists(tableName))
             {
                 System.out.println("Creating table");
-                statement.executeUpdate("CREATE TABLE "+ tableName +" (userid VARCHAR(12), password VARCHAR(12), score INT)");
+                statement.executeUpdate("CREATE TABLE "+ tableName +" (userid VARCHAR(12), password VARCHAR(12), passport VARCHAR(12))");
             }
             else
             {
                 System.out.println("Table exists.");
             }
             //statement = conn.createStatement();
-            System.out.println("Attempting to insert values.");
-            statement.addBatch("INSERT INTO Test VALUES('hello', 'hello', 10)");
-            statement.executeBatch();
+            //statement.addBatch("INSERT INTO Test VALUES('hello', 'hello', 10)");
+            //statement.executeBatch();
+            //statement.executeUpdate("INSERT INTO CUSTOMERS VALUES('admin', 'admin', '2022')");
             statement.close();
-            closeConnections();
     }
     
 
     
     //Establish connection
-    public void establishConnection() {
+    public void establishConnection() throws SQLException {
+        conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
         if (this.conn == null) {
             try {
                 conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
@@ -98,6 +205,7 @@ public final class DataBaseManager
             }
         }
     }
+    
     //Must compare if table DOESN'T exist in program
     public boolean tableExists(String table) throws SQLException
     {

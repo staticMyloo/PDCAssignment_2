@@ -8,10 +8,10 @@ package PDCAssignment_2;
  *
  * @author myles
  */
-public class Data 
+public class EconSeat extends Seat
 {
-    String userName;
-    String passWord;
-    String passPortNo;
-    boolean loginFlag = false;
+    public EconSeat()
+    {
+        
+    }   
 }

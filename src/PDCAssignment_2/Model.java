@@ -4,6 +4,7 @@
  */
 package PDCAssignment_2;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -16,11 +17,32 @@ public class Model extends Observable
     //public customer
     //public 
     public DataBaseManager db;
+    public Data data;
+    public String user;
+    
+    public String origin, destination, time;
+    
     
     public Model()
     {
         this.db = new DataBaseManager();
     }
+    
+    public void checkName(String username, String password, String passport)
+    {
+        this.user = username;
+        this.data = this.db.checkUser(username, password, passport);
+        this.setChanged();
+        this.notifyObservers(this.data); 
+    }
+    
+    public void getSelectedFlightOptions()
+    {
+        db.getSelectedFlights(origin, user, time);
+        this.setChanged();
+        this.notifyObservers();
+    }
+    
     
     
 }
