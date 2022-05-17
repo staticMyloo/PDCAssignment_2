@@ -38,6 +38,11 @@ public class Trip
         return origin+" -> "+destination+"   "+tripLength+"   "+time+"   $"+cost+" "+date;
     }
     
+    public String toViewFlightString()
+    {
+        return origin+" -> "+destination+"   "+tripLength+"   "+time+" "+date;
+    }
+    
     public boolean validateTrip(String origin, String destination, String time)
     {
         return this.origin.equals(origin) && this.destination.equals(destination) && this.time.equals(time);

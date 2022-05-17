@@ -12,12 +12,14 @@ public class Plane737 extends Plane
 {
 
     private Seat[][] seats;
-    private final int rows = 8;
-    private final int cols = 6;
+    private final int rows = 6;
+    private final int cols = 8;
+    private final char letter;
     
     public Plane737()
     {
         super("Boeing 737");
+        this.letter = 'A';
         seats = new Seat[8][6];
         //method to set seat type
     }
@@ -41,6 +43,14 @@ public class Plane737 extends Plane
         return this.name;
     }
     
+    public int getRows()
+    {
+        return rows;
+    }
     
+    public int getColumns()
+    {
+        return cols;
+    }
     
 }

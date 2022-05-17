@@ -42,6 +42,7 @@ public class Controller implements ActionListener
                 if(this.model.data.loginFlag)
                 {
                     this.view.addFlightSelectorPanel();
+                  
                 }
                 else
                 {
@@ -62,6 +63,15 @@ public class Controller implements ActionListener
                 break;
             case  "OK":
                 System.out.println("ok");
+                Trip temp = (Trip) view.flightList.getSelectedValue();
+                model.setSelectedTrip(temp);
+                System.out.println("Your trip is "+temp);
+                if(model.selectedTrip != null)
+                {
+                    view.addSeatSelectorPanel();
+                    this.view.getUserInfoLabel().setText("User: "+model.user);
+                    this.view.getFlightInfoLabel().setText(temp.toViewFlightString());
+                }
                 break;
             case "Delete":
                 System.out.println("delete");

@@ -16,8 +16,6 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -27,7 +25,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
@@ -47,15 +44,13 @@ public class View extends JFrame implements Observer{
     private JLabel destLabel;
     public JButton okButton;
     private JButton deleteButton;
-
     private JPanel boxPanel;
     private JPanel buttonPanel;
     private JPanel timePanel;
     private JLabel timeLabel;
     private JRadioButton timeButton1, timeButton2, timeButton3, timeButton4;
     private JPanel flightSelectorPanel;
-    private JList flightList;
-
+    public JList flightList;
     private JButton loginButton;
     private JPanel loginPanel;
     private JLabel userNameLabel, passWordLabel, passPortLabel;
@@ -63,6 +58,8 @@ public class View extends JFrame implements Observer{
     private JButton showFlightButton;
     public ButtonGroup bg;
     private final String planeIcon = "<html>\u2708<html>";
+    private JPanel userFlightPanel, seatSelectorPanel, userSeatPanel;
+    private JLabel userInfoLabel, flightInfoLabel;
     
     
     public View() throws ParseException {
@@ -173,9 +170,32 @@ public class View extends JFrame implements Observer{
         timePanel.add(timeButton4);
         timePanel.setPreferredSize(new Dimension(300, 50));
         timeButton1.setSelected(true);
-        
-        
         flightSelectorPanel.add(timePanel, BorderLayout.CENTER);
+        
+        //private JPanel userFlightPanel;
+        //private JLabel userInfoLabel, flightInfoLabel;
+        seatSelectorPanel = new JPanel(new BorderLayout());
+        userSeatPanel = new JPanel(new BorderLayout());
+        JPanel leftFill = new JPanel();
+        JPanel rightFill = new JPanel();
+        leftFill.setPreferredSize(new Dimension(40, 183));
+        rightFill.setPreferredSize(new Dimension(40, 183));
+        leftFill.setBorder(blackLine);
+        rightFill.setBorder(blackLine);
+        userSeatPanel.add(leftFill, BorderLayout.WEST);
+        userSeatPanel.add(rightFill, BorderLayout.EAST);
+        userFlightPanel = new JPanel(new BorderLayout());
+        userInfoLabel = new JLabel();
+        flightInfoLabel = new JLabel();
+        userFlightPanel.add(userInfoLabel, BorderLayout.NORTH);
+        userFlightPanel.add(flightInfoLabel, BorderLayout.SOUTH);
+        userFlightPanel.setBorder(blackLine);
+        userFlightPanel.setPreferredSize(new Dimension(300, 40));
+        userSeatPanel.setBorder(blackLine);
+        userSeatPanel.setPreferredSize(new Dimension(300, 183));
+        seatSelectorPanel.add(userFlightPanel, BorderLayout.NORTH);
+        seatSelectorPanel.add(userSeatPanel, BorderLayout.SOUTH);
+        
         
         add(loginPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -211,6 +231,21 @@ public class View extends JFrame implements Observer{
         super.getContentPane().add(flightSelectorPanel, BorderLayout.CENTER);
         flightSelectorPanel.setVisible(true);
         revalidate();
+    }
+    
+    public void addSeatSelectorPanel()
+    {
+        this.getContentPane().remove(flightSelectorPanel);
+        this.getButtonPanel().remove(showFlightButton);
+        super.getContentPane().add(seatSelectorPanel, BorderLayout.CENTER);
+        seatSelectorPanel.setVisible(true);
+        this.revalidate();
+        this.repaint();
+    }
+    
+    public void updateSeatLayout(Trip trip)
+    {
+        
     }
     
     public void updateFlightList(ArrayList list)
@@ -279,6 +314,34 @@ public class View extends JFrame implements Observer{
      */
     public JComboBox getDestBox() {
         return destBox;
+    }
+
+    /**
+     * @return the userFlightPanel
+     */
+    public JPanel getUserFlightPanel() {
+        return userFlightPanel;
+    }
+
+    /**
+     * @return the userInfoLabel
+     */
+    public JLabel getUserInfoLabel() {
+        return userInfoLabel;
+    }
+
+    /**
+     * @return the flightInfoLabel
+     */
+    public JLabel getFlightInfoLabel() {
+        return flightInfoLabel;
+    }
+
+    /**
+     * @return the userSeatPanel
+     */
+    public JPanel getUserSeatPanel() {
+        return userSeatPanel;
     }
 
 }

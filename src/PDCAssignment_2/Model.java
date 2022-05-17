@@ -19,8 +19,8 @@ public class Model extends Observable
     public DataBaseManager db;
     public Data data;
     public String user;
-    
     public String origin, destination, time;
+    public Trip selectedTrip;
     
     
     public Model()
@@ -43,6 +43,10 @@ public class Model extends Observable
         this.notifyObservers();
     }
     
+    public void setSelectedTrip(Trip trip)
+    {
+        this.selectedTrip = trip;
+    }
     
     
 }
