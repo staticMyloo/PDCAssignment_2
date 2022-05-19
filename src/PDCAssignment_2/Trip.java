@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Trip 
 {
-    private Plane plane;
+    private Plane737 plane;
     private String tripLength;
     private String time;
     private String date;
@@ -21,7 +21,7 @@ public class Trip
     private String destination;
    
  
-    public Trip(String origin, String dest, Plane plane, String tripLength, String time, String date, int cost) 
+    public Trip(String origin, String dest, Plane737 plane, String tripLength, String time, String date, int cost) 
     {
         this.origin = origin;
         this.destination = dest;
@@ -58,7 +58,7 @@ public class Trip
         return this;
     }
     
-    public Plane getPlane()
+    public Plane737 getPlane()
     {
         return this.plane;
     }

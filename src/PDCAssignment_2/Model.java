@@ -21,6 +21,7 @@ public class Model extends Observable
     public String user;
     public String origin, destination, time;
     public Trip selectedTrip;
+    public String seatSelection;
     
     
     public Model()

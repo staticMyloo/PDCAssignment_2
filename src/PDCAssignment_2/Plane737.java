@@ -11,32 +11,41 @@ package PDCAssignment_2;
 public class Plane737 extends Plane
 {
 
-    private Seat[][] seats;
-    private final int rows = 6;
-    private final int cols = 8;
+    private SeatComponent[][] seats;
+    private final int rows = 4;
+    private final int cols = 5;
     private final char letter;
     
     public Plane737()
     {
         super("Boeing 737");
         this.letter = 'A';
-        seats = new Seat[8][6];
+        
+        seats = new SeatComponent[rows][cols];
+       
         //method to set seat type
     }
     
+    @Override
+    public String toString()
+    {
+        String out = "";
+        
+        return out;
+    }
     
     @Override
-    public Plane getPlane() 
+    public Plane737 getPlane() 
     {
         return this;
     }
 
-    @Override
-    public Seat[][] getSeats() 
+    public SeatComponent[][] getSeatComps()
     {
         return seats;
     }
-
+    
+  
     @Override
     public String getName() 
     {
@@ -51,6 +60,11 @@ public class Plane737 extends Plane
     public int getColumns()
     {
         return cols;
+    }
+
+    @Override
+    public Seat[][] getSeats() {
+        return null;
     }
     
 }

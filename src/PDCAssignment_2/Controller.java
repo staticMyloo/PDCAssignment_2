@@ -4,10 +4,12 @@
  */
 package PDCAssignment_2;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.ArrayList;
+import javax.swing.UIManager;
 
 /**
  *
@@ -66,11 +68,13 @@ public class Controller implements ActionListener
                 Trip temp = (Trip) view.flightList.getSelectedValue();
                 model.setSelectedTrip(temp);
                 System.out.println("Your trip is "+temp);
+                System.out.println("your plane is "+temp.getPlane().toString());
                 if(model.selectedTrip != null)
                 {
                     view.addSeatSelectorPanel();
                     this.view.getUserInfoLabel().setText("User: "+model.user);
                     this.view.getFlightInfoLabel().setText(temp.toViewFlightString());
+                    this.view.setSeats(temp);
                 }
                 break;
             case "Delete":
@@ -83,6 +87,7 @@ public class Controller implements ActionListener
     
     public static void main(String[] args) throws ParseException 
     {
+        
         View view = new View();
         Model model = new Model();
         Controller con = new Controller(view, model);

@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
@@ -56,9 +57,9 @@ public class View extends JFrame implements Observer{
     private JLabel userNameLabel, passWordLabel, passPortLabel;
     public JFormattedTextField userField, passWordField, passPortField;
     private JButton showFlightButton;
-    public ButtonGroup bg;
+    public ButtonGroup bg, seatGroup;
     private final String planeIcon = "<html>\u2708<html>";
-    private JPanel userFlightPanel, seatSelectorPanel, userSeatPanel;
+    private JPanel userFlightPanel, seatSelectorPanel, userSeatPanel, trueSeatPanel;
     private JLabel userInfoLabel, flightInfoLabel;
     
     
@@ -184,6 +185,9 @@ public class View extends JFrame implements Observer{
         rightFill.setBorder(blackLine);
         userSeatPanel.add(leftFill, BorderLayout.WEST);
         userSeatPanel.add(rightFill, BorderLayout.EAST);
+        trueSeatPanel = new JPanel();
+        //trueSeatPanel.setBackground(Color.red);
+        userSeatPanel.add(trueSeatPanel, BorderLayout.CENTER);
         userFlightPanel = new JPanel(new BorderLayout());
         userInfoLabel = new JLabel();
         flightInfoLabel = new JLabel();
@@ -204,7 +208,7 @@ public class View extends JFrame implements Observer{
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        
+        UIManager.put("ToggleButton.select", Color.BLUE);
         //create add login frame
         //create flight selector frame
         //create planelayout frame maybe? use Jbuttons for seats.
@@ -216,6 +220,29 @@ public class View extends JFrame implements Observer{
     public JPanel getButtonPanel()
     {
         return buttonPanel;
+    }
+    
+    public void setSeats(Trip trip)
+    {
+        trueSeatPanel.setLayout(new GridLayout(trip.getPlane().getRows(), trip.getPlane().getRows()));
+        int rows = trip.getPlane().getRows();
+        int cols = trip.getPlane().getColumns();
+        seatGroup = new ButtonGroup();
+        SeatComponent[][] seats = trip.getPlane().getSeatComps();
+        for(int i = 0; i < rows; i++)
+        {
+            for(int j = 0; j < cols; j++)
+            {
+                seats[i][j] = new SeatComponent();
+                seatGroup.add(seats[i][j]);
+                //seats[i][j].setPreferredSize(new Dimension(boxW, boxH));
+                trueSeatPanel.add(seats[i][j]);
+                this.repaint();
+                this.revalidate();
+            }
+        }
+        
+        
     }
     
     
@@ -242,11 +269,7 @@ public class View extends JFrame implements Observer{
         this.revalidate();
         this.repaint();
     }
-    
-    public void updateSeatLayout(Trip trip)
-    {
-        
-    }
+   
     
     public void updateFlightList(ArrayList list)
     {
