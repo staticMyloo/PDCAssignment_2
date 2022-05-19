@@ -60,7 +60,7 @@ public class View extends JFrame implements Observer{
     public ButtonGroup bg, seatGroup;
     private final String planeIcon = "<html>\u2708<html>";
     private JPanel userFlightPanel, seatSelectorPanel, userSeatPanel, trueSeatPanel;
-    private JLabel userInfoLabel, flightInfoLabel;
+    public JLabel userInfoLabel, flightInfoLabel, seatNumberLabel;
     
     
     public View() throws ParseException {
@@ -191,7 +191,9 @@ public class View extends JFrame implements Observer{
         userFlightPanel = new JPanel(new BorderLayout());
         userInfoLabel = new JLabel();
         flightInfoLabel = new JLabel();
-        userFlightPanel.add(userInfoLabel, BorderLayout.NORTH);
+        seatNumberLabel = new JLabel("Seat:    ");
+        userFlightPanel.add(userInfoLabel, BorderLayout.WEST);
+        userFlightPanel.add(seatNumberLabel, BorderLayout.EAST);
         userFlightPanel.add(flightInfoLabel, BorderLayout.SOUTH);
         userFlightPanel.setBorder(blackLine);
         userFlightPanel.setPreferredSize(new Dimension(300, 40));
@@ -228,18 +230,25 @@ public class View extends JFrame implements Observer{
         int rows = trip.getPlane().getRows();
         int cols = trip.getPlane().getColumns();
         seatGroup = new ButtonGroup();
+        int seatRow = 1;
+        char col = 'A';
         SeatComponent[][] seats = trip.getPlane().getSeatComps();
         for(int i = 0; i < rows; i++)
         {
             for(int j = 0; j < cols; j++)
             {
-                seats[i][j] = new SeatComponent();
+                seats[i][j] = new SeatComponent(new BorderLayout());
+                seats[i][j].setActionCommand(""+seatRow+col);
+                //seats[i][j].setText(""+seatRow+col);
                 seatGroup.add(seats[i][j]);
                 //seats[i][j].setPreferredSize(new Dimension(boxW, boxH));
                 trueSeatPanel.add(seats[i][j]);
                 this.repaint();
                 this.revalidate();
+                col +=1;
             }
+            col = 'A';
+            seatRow++;
         }
         
         
@@ -317,6 +326,21 @@ public class View extends JFrame implements Observer{
 //        }
     }
 
+    void addSeatActionListener(ActionListener listener, Trip trip)
+    {
+        int rows = trip.getPlane().getRows();
+        int cols = trip.getPlane().getColumns();
+        
+        
+        for(int i = 0; i < rows;i++)
+        {
+            for(int j = 0; j < cols; j++)
+            {
+                trip.getPlane().getSeatComps()[i][j].addActionListener(listener);
+            }
+        }
+    }
+    
     void addActionListener(ActionListener listener) 
     {
         this.okButton.addActionListener(listener);

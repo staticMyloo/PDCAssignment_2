@@ -19,7 +19,7 @@ public class Model extends Observable
     public DataBaseManager db;
     public Data data;
     public String user;
-    public String origin, destination, time;
+    public String origin, destination, time, seat;
     public Trip selectedTrip;
     public String seatSelection;
     

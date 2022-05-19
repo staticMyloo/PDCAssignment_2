@@ -32,7 +32,7 @@ public class Controller implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         String command = e.getActionCommand();
-        
+        Object source = e.getActionCommand();
         switch(command)
         {
             case "Login":
@@ -75,13 +75,26 @@ public class Controller implements ActionListener
                     this.view.getUserInfoLabel().setText("User: "+model.user);
                     this.view.getFlightInfoLabel().setText(temp.toViewFlightString());
                     this.view.setSeats(temp);
+                    //this.view.addSeatActionListener(this, temp);
+                    
                 }
                 break;
             case "Delete":
                 System.out.println("delete");
+                String seat = view.seatGroup.getSelection().getActionCommand();
+                this.model.seat = seat;
+                this.view.seatNumberLabel.setText("Seat:   "+seat+"    ");
                 break;
             default:
                 break;    
+        }
+        
+        if(source == view.seatGroup)
+        {
+            
+            String seat = view.seatGroup.getSelection().getActionCommand();
+            this.model.seat = seat;
+            this.view.seatNumberLabel.setText(seat);
         }
     }
     

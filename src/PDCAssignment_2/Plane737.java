@@ -63,7 +63,8 @@ public class Plane737 extends Plane
     }
 
     @Override
-    public Seat[][] getSeats() {
+    public Seat[][] getSeats() 
+    {
         return null;
     }
     
