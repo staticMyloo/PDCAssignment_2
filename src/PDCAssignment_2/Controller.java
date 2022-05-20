@@ -7,6 +7,8 @@ package PDCAssignment_2;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.UIManager;
@@ -15,7 +17,7 @@ import javax.swing.UIManager;
  *
  * @author myles
  */
-public class Controller implements ActionListener
+public class Controller implements ActionListener, ItemListener
 {
     public View view;
     public Model model;
@@ -73,30 +75,35 @@ public class Controller implements ActionListener
                 {
                     view.addSeatSelectorPanel();
                     this.view.getUserInfoLabel().setText("User: "+model.user);
-                    this.view.getFlightInfoLabel().setText(temp.toViewFlightString());
+                    this.view.getFlightInfoLabel().setText("Flight: "+temp.toViewFlightString());
                     this.view.setSeats(temp);
-                    //this.view.addSeatActionListener(this, temp);
-                    
+                    this.view.addSeatItemListener(this, temp);
                 }
                 break;
             case "Delete":
                 System.out.println("delete");
-                String seat = view.seatGroup.getSelection().getActionCommand();
-                this.model.seat = seat;
-                this.view.seatNumberLabel.setText("Seat:   "+seat+"    ");
+                
+                
+                
                 break;
             default:
                 break;    
         }
         
-        if(source == view.seatGroup)
+    }
+        
+    @Override
+    public void itemStateChanged(ItemEvent event)
+    {
+        int state = event.getStateChange();
+        if(state == ItemEvent.SELECTED)
         {
-            
             String seat = view.seatGroup.getSelection().getActionCommand();
             this.model.seat = seat;
-            this.view.seatNumberLabel.setText(seat);
+            this.view.seatNumberLabel.setText("Seat:   "+seat+"    ");
         }
     }
+    
     
     public static void main(String[] args) throws ParseException 
     {

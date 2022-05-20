@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -318,14 +319,24 @@ public class View extends JFrame implements Observer{
             this.revalidate();
             this.repaint();
         }
-//        else if(data.loginFlag)
-//        {
-//            this.addFlightSelectorPanel();
-//            this.revalidate();
-//            this.repaint();
-//        }
     }
 
+    public void addSeatItemListener(ItemListener listener, Trip trip)
+    {   
+        int rows = trip.getPlane().getRows();
+        int cols = trip.getPlane().getColumns();
+        
+        
+        for(int i = 0; i < rows;i++)
+        {
+            for(int j = 0; j < cols; j++)
+            {
+                trip.getPlane().getSeatComps()[i][j].addItemListener(listener);
+            }
+        }
+        
+    }
+    
     void addSeatActionListener(ActionListener listener, Trip trip)
     {
         int rows = trip.getPlane().getRows();
