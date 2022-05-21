@@ -4,6 +4,7 @@
  */
 package PDCAssignment_2;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -19,7 +20,7 @@ public class Model extends Observable
     public DataBaseManager db;
     public Data data;
     public String user;
-    public String origin, destination, time, seat;
+    public String origin, destination, time, seat, passport;
     public Trip selectedTrip;
     public String seatSelection;
     
@@ -35,6 +36,13 @@ public class Model extends Observable
         this.data = this.db.checkUser(username, password, passport);
         this.setChanged();
         this.notifyObservers(this.data); 
+    }
+    
+    public void insertPaymentInfo(String user, String passport, String origin, String destination, String payment) throws SQLException
+    {
+        this.data = db.insertPayment(user, passport, origin, destination, payment);
+        this.setChanged();
+        this.notifyObservers(this.data);
     }
     
     public void getSelectedFlightOptions()

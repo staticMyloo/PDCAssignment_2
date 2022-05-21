@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -26,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -45,7 +48,6 @@ public class View extends JFrame implements Observer{
     private JComboBox destBox;
     private JLabel destLabel;
     public JButton okButton;
-    private JButton deleteButton;
     private JPanel boxPanel;
     private JPanel buttonPanel;
     private JPanel timePanel;
@@ -57,17 +59,19 @@ public class View extends JFrame implements Observer{
     private JPanel loginPanel;
     private JLabel userNameLabel, passWordLabel, passPortLabel;
     public JFormattedTextField userField, passWordField, passPortField;
-    private JButton showFlightButton;
-    public ButtonGroup bg, seatGroup;
+    public JButton showFlightButton, goBackButton, confirmFlightButton, payButton;
+    public ButtonGroup bg, seatGroup, payGroup;
     private final String planeIcon = "<html>\u2708<html>";
     private JPanel userFlightPanel, seatSelectorPanel, userSeatPanel, trueSeatPanel;
     public JLabel userInfoLabel, flightInfoLabel, seatNumberLabel;
-    
+    public JPanel payPanel;
+    public JToggleButton mCardButton, visaButton;
+    private ImageIcon mCardIcon, visaIcon;
     
     public View() throws ParseException {
         setTitle("Booking System");
         setPreferredSize(new Dimension(300, 300));
-
+        UIManager.put("ToggleButton.select", Color.BLUE);
         boxPanel = new JPanel(new BorderLayout());
         Border blackLine = BorderFactory.createLineBorder(Color.black);
         
@@ -103,10 +107,6 @@ public class View extends JFrame implements Observer{
         loginPanel.add(gapfill4);
         loginPanel.setBorder(blackLine);
         
-        
-        
-        
-        
         originPanel = new JPanel(new BorderLayout());
         originLabel = new JLabel("Origin:");
         originPanel.add(originLabel, BorderLayout.WEST);
@@ -132,10 +132,9 @@ public class View extends JFrame implements Observer{
         buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(super.getWidth(), 40));
         okButton = new JButton("OK");
-        deleteButton = new JButton("Delete");
         showFlightButton = new JButton("Show Flights");
-        //buttonPanel.add(okButton);
-        //buttonPanel.add(deleteButton);
+        goBackButton = new JButton("Go back");
+        confirmFlightButton = new JButton("Confirm");
         loginButton = new JButton("Login");
         buttonPanel.add(loginButton);
         buttonPanel.setBorder(blackLine);
@@ -192,7 +191,7 @@ public class View extends JFrame implements Observer{
         userFlightPanel = new JPanel(new BorderLayout());
         userInfoLabel = new JLabel();
         flightInfoLabel = new JLabel();
-        seatNumberLabel = new JLabel("Seat:    ");
+        seatNumberLabel = new JLabel("Seat:            ");
         userFlightPanel.add(userInfoLabel, BorderLayout.WEST);
         userFlightPanel.add(seatNumberLabel, BorderLayout.EAST);
         userFlightPanel.add(flightInfoLabel, BorderLayout.SOUTH);
@@ -203,6 +202,36 @@ public class View extends JFrame implements Observer{
         seatSelectorPanel.add(userFlightPanel, BorderLayout.NORTH);
         seatSelectorPanel.add(userSeatPanel, BorderLayout.SOUTH);
         
+        payPanel = new JPanel(new GridLayout(4,1));
+        JPanel topFill = new JPanel();
+        JPanel bottomFill = new JPanel();
+        mCardIcon = new ImageIcon("./resources/mastercard.png");
+        Image img1 = mCardIcon.getImage();
+        Image newImg1 = img1.getScaledInstance(80, 50, Image.SCALE_SMOOTH);
+        mCardIcon = new ImageIcon(newImg1);
+        //mCardButton.setIcon(mCard);
+        mCardButton = new JToggleButton("MasterCard", mCardIcon);
+        mCardButton.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        visaIcon = new ImageIcon("./resources/visa.png");
+        Image img2 = visaIcon.getImage();
+        Image newImg2 = img2.getScaledInstance(80, 50, Image.SCALE_SMOOTH);
+        visaIcon = new ImageIcon(newImg2);
+        
+        visaButton = new JToggleButton("Visa", visaIcon);
+        visaButton.setHorizontalAlignment(SwingConstants.LEFT);
+        visaButton.setActionCommand("Visa");
+        mCardButton.setActionCommand("Mastercard");
+        payPanel.add(topFill);
+        payPanel.add(mCardButton);
+        payPanel.add(visaButton);
+        payPanel.add(bottomFill);
+        payGroup = new ButtonGroup();
+        payGroup.add(visaButton);
+        payGroup.add(mCardButton);
+        
+        
+        payButton = new JButton("Pay now");
         
         add(loginPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -211,13 +240,17 @@ public class View extends JFrame implements Observer{
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        UIManager.put("ToggleButton.select", Color.BLUE);
         //create add login frame
         //create flight selector frame
         //create planelayout frame maybe? use Jbuttons for seats.
         //create pay info screen
         //create pay complete screen
         //show final ticket
+    }
+    
+    public JPanel getSeatSelectorPanel()
+    {
+        return seatSelectorPanel;
     }
     
     public JPanel getButtonPanel()
@@ -251,8 +284,6 @@ public class View extends JFrame implements Observer{
             col = 'A';
             seatRow++;
         }
-        
-        
     }
     
     
@@ -263,7 +294,24 @@ public class View extends JFrame implements Observer{
         revalidate();
         this.getButtonPanel().add(okButton);
         this.getButtonPanel().add(showFlightButton);
-        this.getButtonPanel().add(deleteButton);
+        revalidate();
+        super.getContentPane().add(flightSelectorPanel, BorderLayout.CENTER);
+        flightSelectorPanel.setVisible(true);
+        revalidate();
+    }
+  
+    
+    public void reAddFlightSelectorPanel()
+    {
+        this.trueSeatPanel.removeAll();
+        this.seatGroup = null;
+        this.getContentPane().remove(seatSelectorPanel);
+        this.getButtonPanel().remove(goBackButton);
+        this.getButtonPanel().remove(confirmFlightButton);
+        repaint();
+        revalidate();
+        this.getButtonPanel().add(okButton);
+        this.getButtonPanel().add(showFlightButton);
         revalidate();
         super.getContentPane().add(flightSelectorPanel, BorderLayout.CENTER);
         flightSelectorPanel.setVisible(true);
@@ -272,14 +320,32 @@ public class View extends JFrame implements Observer{
     
     public void addSeatSelectorPanel()
     {
+        trueSeatPanel.setVisible(true);
         this.getContentPane().remove(flightSelectorPanel);
         this.getButtonPanel().remove(showFlightButton);
+        this.getButtonPanel().remove(okButton);
         super.getContentPane().add(seatSelectorPanel, BorderLayout.CENTER);
         seatSelectorPanel.setVisible(true);
+        this.getButtonPanel().add(confirmFlightButton);
+        this.getButtonPanel().add(goBackButton);
         this.revalidate();
         this.repaint();
     }
    
+    public void addPayPanel()
+    {
+        trueSeatPanel.removeAll();
+        this.getContentPane().remove(trueSeatPanel);
+        trueSeatPanel.setVisible(false);
+        this.repaint();
+        this.revalidate();
+        userSeatPanel.add(payPanel, BorderLayout.CENTER);
+        this.getContentPane().repaint();
+        this.getContentPane().revalidate();
+        payPanel.setVisible(true);
+        this.repaint();
+        this.revalidate();
+    }
     
     public void updateFlightList(ArrayList list)
     {
@@ -302,11 +368,6 @@ public class View extends JFrame implements Observer{
     {
         return okButton;
     }
-    
-    public JButton getDeleteButton()
-    {
-        return deleteButton;
-    }
 
     @Override
     public void update(Observable o, Object o1) 
@@ -326,7 +387,6 @@ public class View extends JFrame implements Observer{
         int rows = trip.getPlane().getRows();
         int cols = trip.getPlane().getColumns();
         
-        
         for(int i = 0; i < rows;i++)
         {
             for(int j = 0; j < cols; j++)
@@ -334,14 +394,12 @@ public class View extends JFrame implements Observer{
                 trip.getPlane().getSeatComps()[i][j].addItemListener(listener);
             }
         }
-        
     }
     
     void addSeatActionListener(ActionListener listener, Trip trip)
     {
         int rows = trip.getPlane().getRows();
         int cols = trip.getPlane().getColumns();
-        
         
         for(int i = 0; i < rows;i++)
         {
@@ -355,9 +413,11 @@ public class View extends JFrame implements Observer{
     void addActionListener(ActionListener listener) 
     {
         this.okButton.addActionListener(listener);
-        this.deleteButton.addActionListener(listener);
         this.loginButton.addActionListener(listener);
         this.showFlightButton.addActionListener(listener);
+        this.goBackButton.addActionListener(listener);
+        this.confirmFlightButton.addActionListener(listener);
+        this.payButton.addActionListener(listener);
     }
 
     /**

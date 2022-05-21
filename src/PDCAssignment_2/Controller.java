@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.UIManager;
@@ -22,8 +23,10 @@ public class Controller implements ActionListener, ItemListener
     public View view;
     public Model model;
     
+    
     public Controller(View view, Model model)
     {
+        UIManager.put("ToggleButton.select", Color.BLUE);
         //JFrame frame = new JFrame("Booking System");
         this.view = view;
         this.model = model;
@@ -34,22 +37,16 @@ public class Controller implements ActionListener, ItemListener
     public void actionPerformed(ActionEvent e)
     {
         String command = e.getActionCommand();
-        Object source = e.getActionCommand();
-        switch(command)
-        {
+        switch (command) {
             case "Login":
                 String user = view.userField.getText();
                 String password = view.passWordField.getText();
                 String passport = view.passPortField.getText();
-                System.out.println(user+" "+password+" "+passport);
+                System.out.println(user + " " + password + " " + passport);
                 this.model.checkName(user, password, passport);
-                if(this.model.data.loginFlag)
-                {
+                if (this.model.data.loginFlag) {
                     this.view.addFlightSelectorPanel();
-                  
-                }
-                else
-                {
+                } else {
                     view.passWordField.setText("INVALID PASSWORD");
                 }
                 this.view.repaint();
@@ -65,29 +62,55 @@ public class Controller implements ActionListener, ItemListener
                 ArrayList<Trip> trips = model.db.getSelectedFlights(origin, destination, time);
                 view.updateFlightList(trips);
                 break;
-            case  "OK":
+            case "OK":
                 System.out.println("ok");
                 Trip temp = (Trip) view.flightList.getSelectedValue();
-                model.setSelectedTrip(temp);
-                System.out.println("Your trip is "+temp);
-                System.out.println("your plane is "+temp.getPlane().toString());
-                if(model.selectedTrip != null)
-                {
-                    view.addSeatSelectorPanel();
-                    this.view.getUserInfoLabel().setText("User: "+model.user);
-                    this.view.getFlightInfoLabel().setText("Flight: "+temp.toViewFlightString());
-                    this.view.setSeats(temp);
-                    this.view.addSeatItemListener(this, temp);
+                view.payPanel.setVisible(false);
+                if (temp != null) {
+                    model.setSelectedTrip(temp);
+                    System.out.println("Your trip is " + temp);
+                    System.out.println("your plane is " + temp.getPlane().toString());
+                    if (model.selectedTrip != null) {
+                        view.addSeatSelectorPanel();
+                        this.view.getUserInfoLabel().setText("User: " + model.user);
+                        this.view.getFlightInfoLabel().setText("Flight: " + temp.toViewFlightString());
+                        this.view.setSeats(temp);
+                        this.view.addSeatItemListener(this, temp);
+                    }
                 }
                 break;
-            case "Delete":
-                System.out.println("delete");
-                
-                
-                
+            case "Go back":
+                temp = null;
+                model.selectedTrip = null;
+                this.view.reAddFlightSelectorPanel();
+                break;
+            case "Confirm":
+                System.out.println("confirm");
+                if(!this.view.payPanel.isVisible())
+                {
+                    this.view.addPayPanel();
+                }
+                else if(this.view.payGroup.getSelection() != null)
+                {
+                    temp = (Trip) view.flightList.getSelectedValue();
+                    System.out.println("paying select true");
+                    String insertUser = model.data.userName;
+                    String insertPass = model.data.passPortNo;
+                    String insertOrigin = temp.getOrigin();
+                    String insertDestination = temp.getDestination();
+                    String insertPayment = this.view.payGroup.getSelection().getActionCommand();
+                    //get customer info
+                    //load into payment method 
+                    try
+                    {
+                       System.out.println(insertUser+insertPass+insertOrigin+insertDestination+insertPayment);
+                       model.insertPaymentInfo(insertUser, insertPass, insertOrigin, insertDestination, insertPayment); 
+                    }
+                    catch(SQLException ex){}
+                }
                 break;
             default:
-                break;    
+                break;  
         }
         
     }

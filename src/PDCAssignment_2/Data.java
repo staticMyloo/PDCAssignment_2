@@ -13,5 +13,8 @@ public class Data
     String userName;
     String passWord;
     String passPortNo;
+    String origin;
+    String destination;
+    String payment;
     boolean loginFlag = false;
 }

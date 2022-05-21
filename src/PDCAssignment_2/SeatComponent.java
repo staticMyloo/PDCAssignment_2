@@ -5,9 +5,11 @@
 package PDCAssignment_2;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
+import javax.swing.UIManager;
 
 /**
  *
@@ -24,6 +26,7 @@ public class SeatComponent extends JToggleButton
     public SeatComponent(BorderLayout layout)
     {
        super();
+       UIManager.put("ToggleButton.select", Color.BLUE);
        this.layout = layout;
        icon = new ImageIcon("./resources/seat.png");
        Image img = icon.getImage();

@@ -33,6 +33,7 @@ public final class DataBaseManager
             establishConnection();
             createCustomerTable();
             createTripList();
+            createPaymentHistoryTable();
         } catch (SQLException ex) {}
     }
 
@@ -60,6 +61,9 @@ public final class DataBaseManager
                 if(passWord.trim().compareTo(pass.trim()) == 0)
                 {
                     System.out.println("login accepted");
+                    data.userName = userName;
+                    data.passWord = passWord;
+                    data.passPortNo = passPortNo;
                     data.loginFlag = true;
                 }
                 else
@@ -72,6 +76,9 @@ public final class DataBaseManager
             {
                 System.out.println("no such user");
                 statement.executeUpdate("INSERT INTO CUSTOMERS VALUES('"+userName.trim()+"', '"+passWord.trim()+"', '"+passPortNo.trim()+"')");
+                data.userName = userName;
+                data.passWord = passWord;
+                data.passPortNo = passPortNo;
                 data.loginFlag = true;
             }
             
@@ -120,6 +127,43 @@ public final class DataBaseManager
         
     }
     
+    public Data insertPayment(String user, String passport, String origin, String destination, String payment) throws SQLException
+    {
+        Data data = new Data();
+        System.out.println("attempting to insert data");
+        Statement statement = conn.createStatement();
+        String insertPayment = "INSERT INTO PAYMENT VALUES ('"+user+"', '"+passport+"', '"+origin+"', '"+destination+"', '"+
+                payment+"')";
+        
+        statement.executeUpdate(insertPayment);
+        statement.close();
+        return data;
+        
+    }
+    
+    public void createPaymentHistoryTable() throws SQLException
+    {
+        System.out.println("attempting to create pay table");
+        Statement statement = conn.createStatement();
+        String tableName = "PAYMENT";
+        
+        if(!tableExists(tableName))
+        {
+            statement.executeUpdate("CREATE TABLE "+ tableName +" (userid VARCHAR(12), passport VARCHAR(12)"
+                    +", origin VARCHAR(12), destination VARCHAR(12), payment VARCHAR(12))");
+            
+            
+            System.out.println("table created");
+        }
+        else
+        {
+            System.out.println("table exists");
+        }
+        
+        statement.close();
+    }
+    
+    
     public void createTripList() throws SQLException
     {
         Statement statement = conn.createStatement();
@@ -163,7 +207,7 @@ public final class DataBaseManager
             if(!tableExists(tableName))
             {
                 System.out.println("Creating table");
-                statement.executeUpdate("CREATE TABLE "+ tableName +" (userid VARCHAR(12), password VARCHAR(12), passport VARCHAR(12))");
+                
             }
             else
             {
