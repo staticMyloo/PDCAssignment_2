@@ -239,10 +239,10 @@ public class View extends JFrame implements Observer{
         payPanel = new JPanel(new GridLayout(4,2,0,15));
         JLabel topFill1 = new JLabel();
         JLabel topFill2 = new JLabel();
-        cardNumberLabel = new JLabel("Card No:");
+        cardNumberLabel = new JLabel("Card No: 6 DIGITS");
         cardNumberField = new JTextField();
         cardNumberField.setPreferredSize(new Dimension(200,50));
-        cardccvLabel = new JLabel("CCV:");
+        cardccvLabel = new JLabel("CCV: 3 DIGITS");
         ccvField = new JTextField();
         ccvField.setPreferredSize(new Dimension(200,50));
         JLabel bottomFill1 = new JLabel();

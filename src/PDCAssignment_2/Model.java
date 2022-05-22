@@ -14,11 +14,9 @@ import java.util.Observable;
  */
 public class Model extends Observable
 {
-    //public trip
-    //public customer
-    //public 
     public DataBaseManager db;
     public Data data;
+    public CardData cardData;
     public String user;
     public String origin, destination, time, seat, passport;
     public Trip selectedTrip;
@@ -29,6 +27,9 @@ public class Model extends Observable
     {
         this.db = new DataBaseManager();
     }
+    
+    
+    
     
     public void checkName(String username, String password, String passport)
     {

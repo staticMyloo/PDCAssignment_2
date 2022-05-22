@@ -46,6 +46,14 @@ public final class DataBaseManager
         return this.conn;
     }
 
+    public CardData setCard(String card, String ccv)
+    {
+        CardData data = new CardData();
+        data.cardNum = card;
+        data.ccv = ccv;
+        return data;
+    }
+    
     public Data checkUser(String userName, String passWord, String passPortNo)
     {   
         

@@ -129,6 +129,20 @@ public class Controller implements ActionListener, ItemListener
                 break;
             case "Pay now":
                 System.out.println("paying now");
+                //read in card num from textField
+                String cardInput = view.cardNumberField.getText();
+                //read in card num from ccvField
+                String ccvInput = view.ccvField.getText();
+                //check if matches
+                //update model.db.cardData into method
+                model.cardData = new CardData();
+                
+                if(cardInput.matches(model.cardData.cardNumberMatch) && ccvInput.matches(model.cardData.CCVMatch))
+                {
+                    model.cardData = model.db.setCard(cardInput, ccvInput);
+                    System.out.println(cardInput+" "+ccvInput);
+                    System.out.println("congrats "+model.data.userName+model.data.passPortNo+" you are flying to "+model.selectedTrip.getOrigin()+" to "+model.selectedTrip.getDestination());
+                }
                 break;
             default:
                 break;  
