@@ -17,4 +17,5 @@ public class Data
     String destination;
     String payment;
     boolean loginFlag = false;
+    boolean paySelect = false;
 }

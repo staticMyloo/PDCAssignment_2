@@ -45,6 +45,9 @@ public class Controller implements ActionListener, ItemListener
                 System.out.println(user + " " + password + " " + passport);
                 this.model.checkName(user, password, passport);
                 if (this.model.data.loginFlag) {
+                    model.data.userName = user;
+                    model.data.passWord = password;
+                    model.data.passPortNo = passport;
                     this.view.addFlightSelectorPanel();
                 } else {
                     view.passWordField.setText("INVALID PASSWORD");
@@ -65,14 +68,14 @@ public class Controller implements ActionListener, ItemListener
             case "OK":
                 System.out.println("ok");
                 Trip temp = (Trip) view.flightList.getSelectedValue();
-                view.payPanel.setVisible(false);
+                view.cardPanel.setVisible(false);
                 if (temp != null) {
                     model.setSelectedTrip(temp);
                     System.out.println("Your trip is " + temp);
                     System.out.println("your plane is " + temp.getPlane().toString());
                     if (model.selectedTrip != null) {
                         view.addSeatSelectorPanel();
-                        this.view.getUserInfoLabel().setText("User: " + model.user);
+                        this.view.getUserInfoLabel().setText("User: " + model.data.userName);
                         this.view.getFlightInfoLabel().setText("Flight: " + temp.toViewFlightString());
                         this.view.setSeats(temp);
                         this.view.addSeatItemListener(this, temp);
@@ -80,15 +83,19 @@ public class Controller implements ActionListener, ItemListener
                 }
                 break;
             case "Go back":
-                temp = null;
-                model.selectedTrip = null;
+                //temp = null;
+                System.out.println(model.data.userName);
+                System.out.println(model.data.passPortNo);
+                //model.selectedTrip = null;
                 this.view.reAddFlightSelectorPanel();
                 break;
             case "Confirm":
                 System.out.println("confirm");
-                if(!this.view.payPanel.isVisible())
+                if(!this.view.cardPanel.isVisible())
                 {
-                    this.view.addPayPanel();
+                    System.out.println(model.data.userName);
+                    System.out.println(model.data.passPortNo);
+                    this.view.addCardPanel();
                 }
                 else if(this.view.payGroup.getSelection() != null)
                 {
@@ -104,10 +111,24 @@ public class Controller implements ActionListener, ItemListener
                     try
                     {
                        System.out.println(insertUser+insertPass+insertOrigin+insertDestination+insertPayment);
-                       model.insertPaymentInfo(insertUser, insertPass, insertOrigin, insertDestination, insertPayment); 
+                       model.data = model.db.insertPaymentInfo(insertUser, insertPass, insertOrigin, insertDestination, insertPayment); 
+                       System.out.println(model.data.paySelect);
+                       if(model.data.paySelect && this.view.payGroup.getSelection() != null)
+                       {
+                           this.view.cardPanel.setVisible(false);
+                           this.model.data.userName = insertUser;
+                           this.model.data.passPortNo = insertPass;
+                           System.out.println(model.data.userName+" "+model.data.passPortNo);
+                           view.repaint();
+                           view.revalidate();
+                           this.view.addPayPanel();
+                       }
                     }
                     catch(SQLException ex){}
                 }
+                break;
+            case "Pay now":
+                System.out.println("paying now");
                 break;
             default:
                 break;  

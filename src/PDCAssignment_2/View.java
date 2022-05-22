@@ -28,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -64,9 +65,13 @@ public class View extends JFrame implements Observer{
     private final String planeIcon = "<html>\u2708<html>";
     private JPanel userFlightPanel, seatSelectorPanel, userSeatPanel, trueSeatPanel;
     public JLabel userInfoLabel, flightInfoLabel, seatNumberLabel;
-    public JPanel payPanel;
+    public JPanel cardPanel;
     public JToggleButton mCardButton, visaButton;
     private ImageIcon mCardIcon, visaIcon;
+    public JPanel payPanel;
+    public JTextField cardNumberField, ccvField;
+    public JLabel cardNumberLabel, cardccvLabel;
+    
     
     public View() throws ParseException {
         setTitle("Booking System");
@@ -202,7 +207,7 @@ public class View extends JFrame implements Observer{
         seatSelectorPanel.add(userFlightPanel, BorderLayout.NORTH);
         seatSelectorPanel.add(userSeatPanel, BorderLayout.SOUTH);
         
-        payPanel = new JPanel(new GridLayout(4,1));
+        cardPanel = new JPanel(new GridLayout(4,1));
         JPanel topFill = new JPanel();
         JPanel bottomFill = new JPanel();
         mCardIcon = new ImageIcon("./resources/mastercard.png");
@@ -222,15 +227,34 @@ public class View extends JFrame implements Observer{
         visaButton.setHorizontalAlignment(SwingConstants.LEFT);
         visaButton.setActionCommand("Visa");
         mCardButton.setActionCommand("Mastercard");
-        payPanel.add(topFill);
-        payPanel.add(mCardButton);
-        payPanel.add(visaButton);
-        payPanel.add(bottomFill);
+        cardPanel.add(topFill);
+        cardPanel.add(mCardButton);
+        cardPanel.add(visaButton);
+        cardPanel.add(bottomFill);
         payGroup = new ButtonGroup();
         payGroup.add(visaButton);
         payGroup.add(mCardButton);
         
         
+        payPanel = new JPanel(new GridLayout(4,2,0,15));
+        JLabel topFill1 = new JLabel();
+        JLabel topFill2 = new JLabel();
+        cardNumberLabel = new JLabel("Card No:");
+        cardNumberField = new JTextField();
+        cardNumberField.setPreferredSize(new Dimension(200,50));
+        cardccvLabel = new JLabel("CCV:");
+        ccvField = new JTextField();
+        ccvField.setPreferredSize(new Dimension(200,50));
+        JLabel bottomFill1 = new JLabel();
+        JLabel bottomFill2 = new JLabel();
+        payPanel.add(topFill1);
+        payPanel.add(topFill2);
+        payPanel.add(cardNumberLabel);
+        payPanel.add(cardNumberField);
+        payPanel.add(cardccvLabel);
+        payPanel.add(ccvField);
+        payPanel.add(bottomFill1);
+        payPanel.add(bottomFill2);
         payButton = new JButton("Pay now");
         
         add(loginPanel, BorderLayout.CENTER);
@@ -256,6 +280,19 @@ public class View extends JFrame implements Observer{
     public JPanel getButtonPanel()
     {
         return buttonPanel;
+    }
+    
+    public void addPayPanel()
+    {
+        super.getContentPane().removeAll();
+        buttonPanel.remove(okButton);
+        buttonPanel.remove(goBackButton);
+        buttonPanel.remove(confirmFlightButton);
+        buttonPanel.add(payButton);
+        super.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        super.getContentPane().add(payPanel, BorderLayout.CENTER);
+        this.repaint();
+        this.revalidate();
     }
     
     public void setSeats(Trip trip)
@@ -332,17 +369,17 @@ public class View extends JFrame implements Observer{
         this.repaint();
     }
    
-    public void addPayPanel()
+    public void addCardPanel()
     {
         trueSeatPanel.removeAll();
         this.getContentPane().remove(trueSeatPanel);
         trueSeatPanel.setVisible(false);
         this.repaint();
         this.revalidate();
-        userSeatPanel.add(payPanel, BorderLayout.CENTER);
+        userSeatPanel.add(cardPanel, BorderLayout.CENTER);
         this.getContentPane().repaint();
         this.getContentPane().revalidate();
-        payPanel.setVisible(true);
+        cardPanel.setVisible(true);
         this.repaint();
         this.revalidate();
     }

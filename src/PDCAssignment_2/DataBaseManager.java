@@ -127,16 +127,18 @@ public final class DataBaseManager
         
     }
     
-    public Data insertPayment(String user, String passport, String origin, String destination, String payment) throws SQLException
+    
+    
+    public Data insertPaymentInfo(String user, String passport, String origin, String destination, String payment) throws SQLException
     {
         Data data = new Data();
         System.out.println("attempting to insert data");
         Statement statement = conn.createStatement();
         String insertPayment = "INSERT INTO PAYMENT VALUES ('"+user+"', '"+passport+"', '"+origin+"', '"+destination+"', '"+
                 payment+"')";
-        
         statement.executeUpdate(insertPayment);
         statement.close();
+        data.paySelect = true;
         return data;
         
     }

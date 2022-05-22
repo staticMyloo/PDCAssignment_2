@@ -34,15 +34,21 @@ public class Model extends Observable
     {
         this.user = username;
         this.data = this.db.checkUser(username, password, passport);
+        data.userName = username;
+        data.passPortNo = passport;
+        data.passWord = password;
         this.setChanged();
         this.notifyObservers(this.data); 
     }
     
     public void insertPaymentInfo(String user, String passport, String origin, String destination, String payment) throws SQLException
     {
-        this.data = db.insertPayment(user, passport, origin, destination, payment);
+        this.data = db.insertPaymentInfo(user, passport, origin, destination, payment);
+        this.data.userName = user;
+        this.data.passPortNo = passport;
         this.setChanged();
         this.notifyObservers(this.data);
+        this.data.paySelect = true;
     }
     
     public void getSelectedFlightOptions()
