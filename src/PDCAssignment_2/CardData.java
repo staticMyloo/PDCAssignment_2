@@ -12,12 +12,50 @@ public class CardData
 {
     String cardNum;
     String ccv;
-    String cardNumberMatch = ("^[0-9]{6}$");
-    String CCVMatch = ("^[0-9]{3}$");
+    String cardNumberMatch;
+    String CCVMatch;
     
+    public CardData()
+    {
+        cardNum = null;
+        ccv = null;
+        cardNumberMatch = ("^[0-9]{6}$");
+        CCVMatch = ("^[0-9]{3}$");
+        
+    }
     
     public boolean cardMatch(String card, String pattern)
     {
         return card.matches(pattern);
+    }
+    
+    public String getNumberMatch()
+    {
+        return this.cardNumberMatch;
+    }
+    
+    public String getCcvMatch()
+    {
+        return this.CCVMatch;
+    }
+    
+    public String getCardNumber()
+    {
+        return this.cardNum;
+    }
+    
+    public String getCcvNumber()
+    {
+        return this.ccv;
+    }
+    
+    public void setCardNumber(String number)
+    {
+        this.cardNum = number;
+    }
+    
+    public void setCcvNumber(String ccv)
+    {
+        this.ccv = ccv;
     }
 }

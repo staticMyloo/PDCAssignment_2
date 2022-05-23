@@ -14,5 +14,4 @@ public class SeatStruct extends Seat
     {
         super();
     }
-    
 }
