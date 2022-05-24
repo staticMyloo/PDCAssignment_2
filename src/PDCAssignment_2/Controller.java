@@ -12,6 +12,8 @@ import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -74,6 +76,7 @@ public class Controller implements ActionListener, ItemListener
                     System.out.println("Your trip is " + temp);
                     System.out.println("your plane is " + temp.getPlane().toString());
                     if (model.selectedTrip != null) {
+                        model.db.selectedTrip = temp;
                         view.addSeatSelectorPanel();
                         this.view.getUserInfoLabel().setText("User: " + model.data.userName);
                         this.view.getFlightInfoLabel().setText("Flight: " + temp.toViewFlightString());
@@ -91,6 +94,9 @@ public class Controller implements ActionListener, ItemListener
                 break;
             case "Confirm":
                 System.out.println("confirm");
+                String selectedSeat = this.view.seatGroup.getSelection().getActionCommand();
+                model.data.seat = selectedSeat;
+                System.out.println(selectedSeat);
                 if(!this.view.cardPanel.isVisible())
                 {
                     System.out.println(model.data.userName);
@@ -112,6 +118,8 @@ public class Controller implements ActionListener, ItemListener
                     {
                        System.out.println(insertUser+insertPass+insertOrigin+insertDestination+insertPayment);
                        model.data = model.db.insertPaymentInfo(insertUser, insertPass, insertOrigin, insertDestination, insertPayment); 
+                       model.data.seat = selectedSeat;
+                       model.data.payment = insertPayment;
                        System.out.println(model.data.paySelect);
                        if(model.data.paySelect && this.view.payGroup.getSelection() != null)
                        {
@@ -142,7 +150,20 @@ public class Controller implements ActionListener, ItemListener
                     model.cardData = model.db.setCard(cardInput, ccvInput);
                     System.out.println(cardInput+" "+ccvInput);
                     System.out.println("congrats "+model.data.userName+model.data.passPortNo+" you are flying to "+model.selectedTrip.getOrigin()+" to "+model.selectedTrip.getDestination());
+                    System.out.println("you paid via"+view.payGroup.getSelection().getActionCommand());
+                    view.addPaySuccessPanel();
+                    System.out.println(model.data.userName+" "+model.data.passPortNo+" "+this.view.payGroup.getSelection().getActionCommand()+" "+model.data.seat);
+                    try {
+                        model.db.insertPaymentReceiptInfo(model.data.userName, model.data.passPortNo, this.view.payGroup.getSelection().getActionCommand(), model.data.seat);
+                    } catch (SQLException ex) {}
+                    //use database to pull information from receipt table
+                    //get userid, passport, payment, seat
+                    //use model selectedTrip to get trip information
+                    view.receiptPane.append((new Receipt(model.data.userName, model.data.passPortNo, model.data.payment, model.selectedTrip, model.data.seat)).toString());
                 }
+                break;
+            case "Click to exit.":
+                view.dispose();
                 break;
             default:
                 break;  
@@ -157,7 +178,7 @@ public class Controller implements ActionListener, ItemListener
         if(state == ItemEvent.SELECTED)
         {
             String seat = view.seatGroup.getSelection().getActionCommand();
-            this.model.seat = seat;
+            this.model.data.seat = seat;
             this.view.seatNumberLabel.setText("Seat:   "+seat+"    ");
         }
     }

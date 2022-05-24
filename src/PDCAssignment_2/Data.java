@@ -16,6 +16,7 @@ public class Data
     String origin;
     String destination;
     String payment;
+    String seat;
     boolean loginFlag = false;
     boolean paySelect = false;
 }

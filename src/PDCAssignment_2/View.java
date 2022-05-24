@@ -7,6 +7,7 @@ package PDCAssignment_2;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -26,14 +27,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
+import static javax.swing.text.html.HTML.Tag.FONT;
 
 /**
  *
@@ -59,7 +63,8 @@ public class View extends JFrame implements Observer{
     private JButton loginButton;
     private JPanel loginPanel;
     private JLabel userNameLabel, passWordLabel, passPortLabel;
-    public JFormattedTextField userField, passWordField, passPortField;
+    public JFormattedTextField userField, passPortField;
+    public JPasswordField passWordField;
     public JButton showFlightButton, goBackButton, confirmFlightButton, payButton;
     public ButtonGroup bg, seatGroup, payGroup;
     private final String planeIcon = "<html>\u2708<html>";
@@ -71,6 +76,9 @@ public class View extends JFrame implements Observer{
     public JPanel payPanel;
     public JTextField cardNumberField, ccvField;
     public JLabel cardNumberLabel, cardccvLabel;
+    public JPanel paySuccess;
+    public JButton exitButton;
+    public JTextArea receiptPane;
     
     
     public View() throws ParseException {
@@ -90,7 +98,7 @@ public class View extends JFrame implements Observer{
             userField = new JFormattedTextField(mask);
             userField.setPreferredSize(new Dimension(200, 30));
             passWordLabel = new JLabel("Password:");
-            passWordField = new JFormattedTextField(mask);
+            passWordField = new JPasswordField();
             passPortLabel = new JLabel("Passport no:");
             passPortField = new JFormattedTextField(mask);
         } catch (ParseException ex) {}
@@ -257,6 +265,18 @@ public class View extends JFrame implements Observer{
         payPanel.add(bottomFill2);
         payButton = new JButton("Pay now");
         
+//        String test[] = {};
+//        flightList = new JList(test);
+//        flightSelectorPanel.add(boxPanel, BorderLayout.NORTH);
+//        flightList.setLayoutOrientation(JList.VERTICAL);
+//        JScrollPane scroll = new JScrollPane(flightList);
+        
+        paySuccess = new JPanel();
+        exitButton = new JButton("Click to exit.");
+        receiptPane = new JTextArea();
+        receiptPane.setEditable(false);
+        receiptPane.setFont(new Font("Courier", Font.BOLD, 14));
+        
         add(loginPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -280,6 +300,18 @@ public class View extends JFrame implements Observer{
     public JPanel getButtonPanel()
     {
         return buttonPanel;
+    }
+    
+   
+    public void addPaySuccessPanel()
+    {
+        super.getContentPane().remove(payPanel);
+        getButtonPanel().remove(payButton);
+        getButtonPanel().add(exitButton);
+        super.getContentPane().add(receiptPane, BorderLayout.CENTER);
+        
+        repaint();
+        revalidate();
     }
     
     public void addPayPanel()
@@ -455,6 +487,7 @@ public class View extends JFrame implements Observer{
         this.goBackButton.addActionListener(listener);
         this.confirmFlightButton.addActionListener(listener);
         this.payButton.addActionListener(listener);
+        this.exitButton.addActionListener(listener);
     }
 
     /**

@@ -18,7 +18,7 @@ public class Model extends Observable
     public Data data;
     public CardData cardData;
     public String user;
-    public String origin, destination, time, seat, passport;
+    public String origin, destination, time, passport;
     public Trip selectedTrip;
     public String seatSelection;
     

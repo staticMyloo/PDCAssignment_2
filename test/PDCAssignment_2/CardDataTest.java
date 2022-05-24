@@ -43,6 +43,7 @@ public class CardDataTest {
     public void testCardNumberMatch() {
         System.out.println("cardMatch");
         CardData instance = new CardData();
+        //testing for 6 digit match only. compare to regex pattern.
         instance.setCardNumber("002003");
         boolean expResult = true;
         String pattern = ("^[0-9]{6}$");
@@ -57,6 +58,7 @@ public class CardDataTest {
     public void testCardCCVMatch() {
         System.out.println("getCcvMatch");
         CardData instance = new CardData();
+        //testing for 3 digit match only. compare to regex pattern.
         instance.setCcvNumber("123");
         String pattern = ("^[0-9]{3}$");
         boolean expResult = true;
