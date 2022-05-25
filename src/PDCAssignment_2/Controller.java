@@ -106,6 +106,7 @@ public class Controller implements ActionListener, ItemListener
                 else if(this.view.payGroup.getSelection() != null)
                 {
                     temp = (Trip) view.flightList.getSelectedValue();
+                    model.db.selectedTrip = temp;
                     System.out.println("paying select true");
                     String insertUser = model.data.userName;
                     String insertPass = model.data.passPortNo;
@@ -132,7 +133,7 @@ public class Controller implements ActionListener, ItemListener
                            this.view.addPayPanel();
                        }
                     }
-                    catch(SQLException ex){}
+                    catch(SQLException ex){Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);}
                 }
                 break;
             case "Pay now":
@@ -152,14 +153,22 @@ public class Controller implements ActionListener, ItemListener
                     System.out.println("congrats "+model.data.userName+model.data.passPortNo+" you are flying to "+model.selectedTrip.getOrigin()+" to "+model.selectedTrip.getDestination());
                     System.out.println("you paid via"+view.payGroup.getSelection().getActionCommand());
                     view.addPaySuccessPanel();
-                    System.out.println(model.data.userName+" "+model.data.passPortNo+" "+this.view.payGroup.getSelection().getActionCommand()+" "+model.data.seat);
+                    System.out.println(model.data.userName.trim()+" "+model.data.passPortNo.trim()+" "+this.view.payGroup.getSelection().getActionCommand()+" "+model.data.seat);
                     try {
-                        model.db.insertPaymentReceiptInfo(model.data.userName, model.data.passPortNo, this.view.payGroup.getSelection().getActionCommand(), model.data.seat);
-                    } catch (SQLException ex) {}
-                    //use database to pull information from receipt table
-                    //get userid, passport, payment, seat
-                    //use model selectedTrip to get trip information
-                    view.receiptPane.append((new Receipt(model.data.userName, model.data.passPortNo, model.data.payment, model.selectedTrip, model.data.seat)).toString());
+                        model.db.insertPaymentReceiptInfo(model.data.userName.trim(), model.data.passPortNo.trim(), this.view.payGroup.getSelection().getActionCommand(), model.data.seat);
+                    } catch (SQLException ex) {Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);}
+            
+                //use database to pull information from receipt table
+                //get userid, passport, payment, seat
+                //use model selectedTrip to get trip information
+                System.out.println(model.data.userName+" "+model.data.passPortNo+" "+model.data.payment+" "+model.data.seat);
+            try {
+                view.receiptPane.append((model.db.generateReceipt(model.data.userName.trim(), model.data.passPortNo.trim(), model.data.payment.trim(), model.data.seat.trim())).toString());
+            } catch (SQLException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+            
                 }
                 break;
             case "Click to exit.":

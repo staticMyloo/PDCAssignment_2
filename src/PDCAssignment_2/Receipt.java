@@ -15,15 +15,16 @@ public class Receipt
     String payment;
     String seat;
     Trip trip;
+    int receiptNo;
     
-    
-    public Receipt(String name, String passPort, String payment, Trip trip, String seat)
+    public Receipt(String name, String passPort, String payment, Trip trip, String seat, int receiptNo)
     {
         this.name = name;
         this.passPort = passPort;
         this.payment = payment;
         this.trip = trip;
         this.seat = seat;
+        this.receiptNo = receiptNo;
     }
     
     @Override
@@ -39,6 +40,7 @@ public class Receipt
         out+= "Date: "+trip.getTripDate()+"\n";
         out+= "Duration "+trip.getTripLength()+"\n";
         out+= "Seat: "+seat+"\n";
+        out+= "Receipt Number: 0"+(receiptNo);
         out+= "+                   +";
         return out;
     }

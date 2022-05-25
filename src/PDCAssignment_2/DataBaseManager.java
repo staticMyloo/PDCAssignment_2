@@ -48,11 +48,42 @@ public final class DataBaseManager
         return this.conn;
     }
 
-    public Receipt generateReceipt(String name, String passport, String payment, String seat)
+    public Receipt generateReceipt(String name, String passport, String payment, String seat) throws SQLException
     {
+        Statement statement = conn.createStatement();
+        /*
+        SELECT USERID, PASSPORT, PAYMENT, SEAT
+        FROM RECEIPTS
+        WHERE userid LIKE 'myles'
+        AND passport LIKE 'passport'
+        AND payment LIKE 'VISA'
+        AND seat LIKE '1Z'
+        */
         
-        
-        
+               String query = "SELECT RECEIPT_ID, USERID, PASSPORT, PAYMENT, SEAT ";
+               query+= "FROM RECEIPTS ";
+               query+= "WHERE USERID = '"+name+"' ";
+               query+= "AND PASSPORT = '"+passport+"' ";
+               query+= "AND PAYMENT = '"+payment+"' ";
+               query+= "AND SEAT = '"+seat+"'";
+               ResultSet rs = statement.executeQuery(query);
+               
+               if(rs.next())
+               {
+                   System.out.println("rs successful");
+                   int receiptNo = rs.getInt(1);
+                   String receiptName = rs.getString("USERID");
+                   String receiptPass = rs.getString("PASSPORT");
+                   String receiptPayment = rs.getString("PAYMENT");
+                   String receiptSeat = rs.getString("SEAT");
+                   System.out.println(receiptNo+" "+receiptName+" "+receiptPass+" "+receiptPayment+" "+receiptSeat);
+                   return new Receipt(receiptName, receiptPass, receiptPayment, selectedTrip, receiptSeat, receiptNo);    
+               }
+               else
+               {
+                   System.out.println("receipt failed");
+                   return null;
+               }
     }
     
     public CardData setCard(String card, String ccv)
@@ -183,9 +214,11 @@ public final class DataBaseManager
     
     public void insertPaymentReceiptInfo(String user, String passport, String payment, String seat) throws SQLException
     {
+        
         System.out.println("Inserting payment receipt record");
         Statement statement = conn.createStatement();
-        String insertReceipt = "INSERT INTO RECEIPTS (userid, passport, payment) VALUES ('"+user+"', '"+passport+"', '"+payment+"', '"+seat+"')";
+        String insertReceipt = "INSERT INTO RECEIPTS (userid, passport, payment, seat) VALUES ('"+user.trim()+"', '"+passport.trim()+"', '"+payment+"', '"+seat+"')";
+        System.out.println("INSERT INTO RECEIPTS (userid, passport, payment, seat) VALUES ('"+user+"', '"+passport+"', '"+payment+"', '"+seat+"')");
         statement.executeUpdate(insertReceipt);
     }
     

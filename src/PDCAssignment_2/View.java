@@ -37,7 +37,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
-import static javax.swing.text.html.HTML.Tag.FONT;
 
 /**
  *
