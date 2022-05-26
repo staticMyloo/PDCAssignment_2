@@ -85,7 +85,7 @@ public class View extends JFrame implements Observer{
         setPreferredSize(new Dimension(300, 300));
         UIManager.put("ToggleButton.select", Color.BLUE);
         boxPanel = new JPanel(new BorderLayout());
-        Border blackLine = BorderFactory.createLineBorder(Color.black);
+        //Border blackLine = BorderFactory.createLineBorder(Color.black);
         
         loginPanel = new JPanel(new GridLayout(5,2,0,15));
         
@@ -117,7 +117,7 @@ public class View extends JFrame implements Observer{
         loginPanel.add(passPortField);
         loginPanel.add(gapfill3);
         loginPanel.add(gapfill4);
-        loginPanel.setBorder(blackLine);
+        //loginPanel.setBorder(blackLine);
         
         originPanel = new JPanel(new BorderLayout());
         originLabel = new JLabel("Origin:");
@@ -149,11 +149,11 @@ public class View extends JFrame implements Observer{
         confirmFlightButton = new JButton("Confirm");
         loginButton = new JButton("Login");
         buttonPanel.add(loginButton);
-        buttonPanel.setBorder(blackLine);
+        //buttonPanel.setBorder(blackLine);
         flightSelectorPanel = new JPanel(new BorderLayout());
         flightSelectorPanel.setPreferredSize(new Dimension(300, 300));
         flightSelectorPanel.setBackground(new Color(70, 89, 75));
-        flightSelectorPanel.setBorder(blackLine);
+        //flightSelectorPanel.setBorder(blackLine);
         
         String test[] = {};
         flightList = new JList(test);
@@ -161,8 +161,6 @@ public class View extends JFrame implements Observer{
         flightList.setLayoutOrientation(JList.VERTICAL);
         JScrollPane scroll = new JScrollPane(flightList);
         scroll.setPreferredSize(new Dimension(300,135));
-        //super.add(boxPanel, BorderLayout.NORTH);
-        //flightList.setPreferredSize(new Dimension(300, 135));
         flightSelectorPanel.add(scroll, BorderLayout.SOUTH);
         
         timePanel = new JPanel();
@@ -185,20 +183,16 @@ public class View extends JFrame implements Observer{
         timeButton1.setSelected(true);
         flightSelectorPanel.add(timePanel, BorderLayout.CENTER);
         
-        //private JPanel userFlightPanel;
-        //private JLabel userInfoLabel, flightInfoLabel;
+
         seatSelectorPanel = new JPanel(new BorderLayout());
         userSeatPanel = new JPanel(new BorderLayout());
         JPanel leftFill = new JPanel();
         JPanel rightFill = new JPanel();
         leftFill.setPreferredSize(new Dimension(40, 183));
         rightFill.setPreferredSize(new Dimension(40, 183));
-        leftFill.setBorder(blackLine);
-        rightFill.setBorder(blackLine);
         userSeatPanel.add(leftFill, BorderLayout.WEST);
         userSeatPanel.add(rightFill, BorderLayout.EAST);
         trueSeatPanel = new JPanel();
-        //trueSeatPanel.setBackground(Color.red);
         userSeatPanel.add(trueSeatPanel, BorderLayout.CENTER);
         userFlightPanel = new JPanel(new BorderLayout());
         userInfoLabel = new JLabel();
@@ -207,10 +201,8 @@ public class View extends JFrame implements Observer{
         userFlightPanel.add(userInfoLabel, BorderLayout.WEST);
         userFlightPanel.add(seatNumberLabel, BorderLayout.EAST);
         userFlightPanel.add(flightInfoLabel, BorderLayout.SOUTH);
-        userFlightPanel.setBorder(blackLine);
         userFlightPanel.setPreferredSize(new Dimension(300, 40));
-        userSeatPanel.setBorder(blackLine);
-        userSeatPanel.setPreferredSize(new Dimension(300, 183));
+        userSeatPanel.setPreferredSize(new Dimension(300, 181));
         seatSelectorPanel.add(userFlightPanel, BorderLayout.NORTH);
         seatSelectorPanel.add(userSeatPanel, BorderLayout.SOUTH);
         
@@ -221,7 +213,6 @@ public class View extends JFrame implements Observer{
         Image img1 = mCardIcon.getImage();
         Image newImg1 = img1.getScaledInstance(80, 50, Image.SCALE_SMOOTH);
         mCardIcon = new ImageIcon(newImg1);
-        //mCardButton.setIcon(mCard);
         mCardButton = new JToggleButton("MasterCard", mCardIcon);
         mCardButton.setHorizontalAlignment(SwingConstants.LEFT);
         
@@ -264,12 +255,6 @@ public class View extends JFrame implements Observer{
         payPanel.add(bottomFill2);
         payButton = new JButton("Pay now");
         
-//        String test[] = {};
-//        flightList = new JList(test);
-//        flightSelectorPanel.add(boxPanel, BorderLayout.NORTH);
-//        flightList.setLayoutOrientation(JList.VERTICAL);
-//        JScrollPane scroll = new JScrollPane(flightList);
-        
         paySuccess = new JPanel();
         exitButton = new JButton("Click to exit.");
         receiptPane = new JTextArea();
@@ -283,12 +268,7 @@ public class View extends JFrame implements Observer{
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        //create add login frame
-        //create flight selector frame
-        //create planelayout frame maybe? use Jbuttons for seats.
-        //create pay info screen
-        //create pay complete screen
-        //show final ticket
+
     }
     
     public JPanel getSeatSelectorPanel()

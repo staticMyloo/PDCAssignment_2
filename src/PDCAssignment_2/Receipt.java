@@ -16,6 +16,7 @@ public class Receipt
     String seat;
     Trip trip;
     int receiptNo;
+    private final String planeIcon = "<html>\u2708<html>";
     
     public Receipt(String name, String passPort, String payment, Trip trip, String seat, int receiptNo)
     {
@@ -31,7 +32,7 @@ public class Receipt
     public String toString()
     {
         String out = "";
-        out+= "+                   +\n";
+        out+= "+                      +"+"\n";
         out+= "User: "+name+"\n";
         out+= "Passport: "+passPort+"\n";
         out+= "Payment type: "+payment+"\n";
@@ -40,8 +41,8 @@ public class Receipt
         out+= "Date: "+trip.getTripDate()+"\n";
         out+= "Duration "+trip.getTripLength()+"\n";
         out+= "Seat: "+seat+"\n";
-        out+= "Receipt Number: 0"+(receiptNo);
-        out+= "+                   +";
+        out+= "Receipt Number: 0"+(receiptNo)+"\n";
+        out+= "+  +";
         return out;
     }
     

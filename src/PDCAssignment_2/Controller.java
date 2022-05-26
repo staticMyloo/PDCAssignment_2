@@ -52,7 +52,7 @@ public class Controller implements ActionListener, ItemListener
                     model.data.passPortNo = passport;
                     this.view.addFlightSelectorPanel();
                 } else {
-                    view.passWordField.setText("INVALID PASSWORD");
+                    view.userField.setText("INVALID PASSWORD");
                 }
                 this.view.repaint();
                 this.view.revalidate();

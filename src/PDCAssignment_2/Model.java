@@ -28,9 +28,6 @@ public class Model extends Observable
         this.db = new DataBaseManager();
     }
     
-    
-    
-    
     public void checkName(String username, String password, String passport)
     {
         this.user = username;
