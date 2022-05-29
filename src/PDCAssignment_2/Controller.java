@@ -25,6 +25,13 @@ public class Controller implements ActionListener, ItemListener
     public View view;
     public Model model;
     
+    public Controller() throws ParseException
+    {
+        UIManager.put("ToggleButton.select", Color.BLUE);
+        this.view = new View();
+        this.model = new Model();
+        this.view.addActionListener(this);
+    }
     
     public Controller(View view, Model model)
     {
@@ -188,11 +195,11 @@ public class Controller implements ActionListener, ItemListener
     }
     
     
-    public static void main(String[] args) throws ParseException 
-    {
-        
-        View view = new View();
-        Model model = new Model();
-        Controller con = new Controller(view, model);
-    }
+//    public static void main(String[] args) throws ParseException 
+//    {
+//        
+//        View view = new View();
+//        Model model = new Model();
+//        Controller con = new Controller(view, model);
+//    }
 }

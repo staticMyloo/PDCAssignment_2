@@ -5,7 +5,6 @@
 package PDCAssignment_2;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Observable;
 
 /**

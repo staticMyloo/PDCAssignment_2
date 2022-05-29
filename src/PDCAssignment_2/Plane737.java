@@ -13,7 +13,6 @@ import java.util.logging.Logger;
  */
 public class Plane737 extends Plane
 {
-
     private SeatComponent[][] seats;
     private final int rows = 4;
     private final int cols = 5;
@@ -23,10 +22,7 @@ public class Plane737 extends Plane
     {
         super("Boeing 737");
         this.letter = 'A';
-        
         seats = new SeatComponent[rows][cols];
-       
-        //method to set seat type
     }
     
     @Override
