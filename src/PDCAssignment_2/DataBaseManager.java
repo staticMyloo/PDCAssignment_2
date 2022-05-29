@@ -337,7 +337,6 @@ public final class DataBaseManager
         
         return flag;
     }
-
 }
 
     

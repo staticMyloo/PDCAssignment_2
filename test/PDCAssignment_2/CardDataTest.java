@@ -4,6 +4,7 @@
  */
 package PDCAssignment_2;
 
+import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -42,13 +43,21 @@ public class CardDataTest {
     @Test
     public void testCardNumberMatch() {
         System.out.println("cardMatch");
+        Random rand = new Random();
         CardData instance = new CardData();
         //testing for 6 digit match only. compare to regex pattern.
-        instance.setCardNumber("002003");
         boolean expResult = true;
         String pattern = ("^[0-9]{6}$");
-        boolean result = instance.cardMatch(instance.getCardNumber(), pattern);
-        assertEquals(expResult, result);
+        //generate 10 random test cases for card number match
+        for(int i = 0; i < 10; i++)
+        {
+            Integer randomInt = Math.abs(rand.nextInt() % 999999);
+            String formattedString = String.format("%06d", randomInt);
+            instance.setCardNumber(formattedString);
+            System.out.println(String.format("%06d", randomInt));
+            boolean result = instance.cardMatch(instance.getCardNumber(), pattern);
+            assertEquals(expResult, result);
+        }
     }
     
     /**
@@ -57,13 +66,21 @@ public class CardDataTest {
     @Test
     public void testCardCCVMatch() {
         System.out.println("getCcvMatch");
+        Random rand = new Random();
         CardData instance = new CardData();
-        //testing for 3 digit match only. compare to regex pattern.
-        instance.setCcvNumber("123");
-        String pattern = ("^[0-9]{3}$");
         boolean expResult = true;
-        boolean result = instance.cardMatch(instance.getCcvNumber(), pattern);
-        assertEquals(expResult, result);
+        String pattern = ("^[0-9]{3}$");
+        
+        for(int i = 0; i < 10; i++)
+        {
+            Integer randomInt = Math.abs(rand.nextInt() % 999);
+            String formattedString = String.format("%03d", randomInt);
+            instance.setCcvNumber(formattedString);
+            System.out.println(String.format("%03d", randomInt));
+            boolean result = instance.ccvMatch(instance.getCcvNumber(), pattern);
+            assertEquals(expResult, result);
+        }
+        
     }
  
 

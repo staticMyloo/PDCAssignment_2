@@ -60,6 +60,4 @@ public class Model extends Observable
     {
         this.selectedTrip = trip;
     }
-    
-    
 }

@@ -4,6 +4,9 @@
  */
 package PDCAssignment_2;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author myles
@@ -27,14 +30,6 @@ public class Plane737 extends Plane
     }
     
     @Override
-    public String toString()
-    {
-        String out = "";
-        
-        return out;
-    }
-    
-    @Override
     public Plane737 getPlane() 
     {
         return this;
@@ -45,7 +40,6 @@ public class Plane737 extends Plane
         return seats;
     }
     
-  
     @Override
     public String getName() 
     {
@@ -65,6 +59,11 @@ public class Plane737 extends Plane
     @Override
     public Seat[][] getSeats() 
     {
+        try {
+            throw new Exception("Get seats now lives within SeatComponents in child class");
+        } catch (Exception ex) {
+            Logger.getLogger(Plane737.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
     

@@ -29,6 +29,11 @@ public class CardData
         return card.matches(pattern);
     }
     
+    public boolean ccvMatch(String card, String pattern)
+    {
+        return card.matches(pattern);
+    }
+    
     public String getNumberMatch()
     {
         return this.cardNumberMatch;

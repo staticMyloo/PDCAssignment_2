@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.ButtonGroup;
@@ -34,7 +33,11 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -95,7 +98,25 @@ public class View extends JFrame implements Observer{
             userField = new JFormattedTextField(mask);
             userField.setPreferredSize(new Dimension(200, 30));
             passWordLabel = new JLabel("Password:");
-            passWordField = new JPasswordField();
+            passWordField = new JPasswordField(12);
+            
+            //sets password field to a limit as to not cause database errors
+            PlainDocument document = (PlainDocument) passWordField.getDocument();
+            document.setDocumentFilter(new DocumentFilter()
+            {
+                @Override
+                public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException
+                {
+                    String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+                    if (string.length() <= 12) 
+                    {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+             
+                }
+            });
+            
+            
             passPortLabel = new JLabel("Passport no:");
             passPortField = new JFormattedTextField(mask);
         } catch (ParseException ex) {}
@@ -135,8 +156,7 @@ public class View extends JFrame implements Observer{
         boxPanel.add(originPanel, BorderLayout.NORTH);
         boxPanel.add(destPanel, BorderLayout.SOUTH);
         boxPanel.setPreferredSize(new Dimension(200,50));
-        //originLabel -> originBox
-        //destLabel -> destBox
+       
         buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(super.getWidth(), 40));
         okButton = new JButton("OK");
