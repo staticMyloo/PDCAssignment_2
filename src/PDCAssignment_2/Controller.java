@@ -44,7 +44,6 @@ public class Controller implements ActionListener, ItemListener
                 String user = view.userField.getText();
                 String password = view.passWordField.getText();
                 String passport = view.passPortField.getText();
-                System.out.println(user + " " + password + " " + passport);
                 this.model.checkName(user, password, passport);
                 if (this.model.data.loginFlag) {
                     model.data.userName = user;
@@ -56,10 +55,8 @@ public class Controller implements ActionListener, ItemListener
                 }
                 this.view.repaint();
                 this.view.revalidate();
-                System.out.println("login pressed");
                 break;
             case "Show Flights":
-                System.out.println("showing flights");
                 //pass in model method to get flights
                 String origin = (String) view.getOriginBox().getSelectedItem();
                 String destination = (String) view.getDestBox().getSelectedItem();
@@ -68,13 +65,12 @@ public class Controller implements ActionListener, ItemListener
                 view.updateFlightList(trips);
                 break;
             case "OK":
-                System.out.println("ok");
                 Trip temp = (Trip) view.flightList.getSelectedValue();
                 view.cardPanel.setVisible(false);
                 if (temp != null) {
                     model.setSelectedTrip(temp);
-                    System.out.println("Your trip is " + temp);
-                    System.out.println("your plane is " + temp.getPlane().toString());
+                    //System.out.println("Your trip is " + temp);
+                    //System.out.println("your plane is " + temp.getPlane().toString());
                     if (model.selectedTrip != null) {
                         model.db.selectedTrip = temp;
                         view.addSeatSelectorPanel();
@@ -87,27 +83,26 @@ public class Controller implements ActionListener, ItemListener
                 break;
             case "Go back":
                 //temp = null;
-                System.out.println(model.data.userName);
-                System.out.println(model.data.passPortNo);
+                //System.out.println(model.data.userName);
+                //System.out.println(model.data.passPortNo);
                 //model.selectedTrip = null;
                 this.view.reAddFlightSelectorPanel();
                 break;
             case "Confirm":
-                System.out.println("confirm");
                 String selectedSeat = this.view.seatGroup.getSelection().getActionCommand();
                 model.data.seat = selectedSeat;
-                System.out.println(selectedSeat);
+                //System.out.println(selectedSeat);
                 if(!this.view.cardPanel.isVisible())
                 {
-                    System.out.println(model.data.userName);
-                    System.out.println(model.data.passPortNo);
+                    //System.out.println(model.data.userName);
+                    //System.out.println(model.data.passPortNo);
                     this.view.addCardPanel();
                 }
                 else if(this.view.payGroup.getSelection() != null)
                 {
                     temp = (Trip) view.flightList.getSelectedValue();
                     model.db.selectedTrip = temp;
-                    System.out.println("paying select true");
+                    //System.out.println("paying select true");
                     String insertUser = model.data.userName;
                     String insertPass = model.data.passPortNo;
                     String insertOrigin = temp.getOrigin();
@@ -117,17 +112,17 @@ public class Controller implements ActionListener, ItemListener
                     //load into payment method 
                     try
                     {
-                       System.out.println(insertUser+insertPass+insertOrigin+insertDestination+insertPayment);
+                       //System.out.println(insertUser+insertPass+insertOrigin+insertDestination+insertPayment);
                        model.data = model.db.insertPaymentInfo(insertUser, insertPass, insertOrigin, insertDestination, insertPayment); 
                        model.data.seat = selectedSeat;
                        model.data.payment = insertPayment;
-                       System.out.println(model.data.paySelect);
+                       //System.out.println(model.data.paySelect);
                        if(model.data.paySelect && this.view.payGroup.getSelection() != null)
                        {
                            this.view.cardPanel.setVisible(false);
                            this.model.data.userName = insertUser;
                            this.model.data.passPortNo = insertPass;
-                           System.out.println(model.data.userName+" "+model.data.passPortNo);
+                           //System.out.println(model.data.userName+" "+model.data.passPortNo);
                            view.repaint();
                            view.revalidate();
                            this.view.addPayPanel();
@@ -137,7 +132,7 @@ public class Controller implements ActionListener, ItemListener
                 }
                 break;
             case "Pay now":
-                System.out.println("paying now");
+                //System.out.println("paying now");
                 //read in card num from textField
                 String cardInput = view.cardNumberField.getText();
                 //read in card num from ccvField
@@ -149,11 +144,11 @@ public class Controller implements ActionListener, ItemListener
                 if(cardInput.matches(model.cardData.cardNumberMatch) && ccvInput.matches(model.cardData.CCVMatch))
                 {
                     model.cardData = model.db.setCard(cardInput, ccvInput);
-                    System.out.println(cardInput+" "+ccvInput);
-                    System.out.println("congrats "+model.data.userName+model.data.passPortNo+" you are flying to "+model.selectedTrip.getOrigin()+" to "+model.selectedTrip.getDestination());
-                    System.out.println("you paid via"+view.payGroup.getSelection().getActionCommand());
+                    //System.out.println(cardInput+" "+ccvInput);
+                    //System.out.println("congrats "+model.data.userName+model.data.passPortNo+" you are flying to "+model.selectedTrip.getOrigin()+" to "+model.selectedTrip.getDestination());
+                    //System.out.println("you paid via"+view.payGroup.getSelection().getActionCommand());
                     view.addPaySuccessPanel();
-                    System.out.println(model.data.userName.trim()+" "+model.data.passPortNo.trim()+" "+this.view.payGroup.getSelection().getActionCommand()+" "+model.data.seat);
+                    //System.out.println(model.data.userName.trim()+" "+model.data.passPortNo.trim()+" "+this.view.payGroup.getSelection().getActionCommand()+" "+model.data.seat);
                     try {
                         model.db.insertPaymentReceiptInfo(model.data.userName.trim(), model.data.passPortNo.trim(), this.view.payGroup.getSelection().getActionCommand(), model.data.seat);
                     } catch (SQLException ex) {Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);}
@@ -161,7 +156,7 @@ public class Controller implements ActionListener, ItemListener
                 //use database to pull information from receipt table
                 //get userid, passport, payment, seat
                 //use model selectedTrip to get trip information
-                System.out.println(model.data.userName+" "+model.data.passPortNo+" "+model.data.payment+" "+model.data.seat);
+                //System.out.println(model.data.userName+" "+model.data.passPortNo+" "+model.data.payment+" "+model.data.seat);
             try {
                 view.receiptPane.append((model.db.generateReceipt(model.data.userName.trim(), model.data.passPortNo.trim(), model.data.payment.trim(), model.data.seat.trim())).toString());
             } catch (SQLException ex) {

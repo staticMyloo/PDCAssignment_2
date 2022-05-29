@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,7 +34,6 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
 /**
@@ -125,7 +123,6 @@ public class View extends JFrame implements Observer{
         String[] orgString = {"AKL","WEL","CHCH"};
         originBox = new JComboBox(orgString);
         originBox.setPreferredSize(new Dimension(200, 25));
-        //originPanel.setBorder(blackLine);
         originPanel.add(originBox, BorderLayout.EAST);
 
         destPanel = new JPanel(new BorderLayout());
@@ -135,7 +132,6 @@ public class View extends JFrame implements Observer{
         destBox = new JComboBox(destString);
         destBox.setPreferredSize(new Dimension(200, 25));
         destPanel.add(destBox, BorderLayout.EAST);
-        //destPanel.setBorder(blackLine);
         boxPanel.add(originPanel, BorderLayout.NORTH);
         boxPanel.add(destPanel, BorderLayout.SOUTH);
         boxPanel.setPreferredSize(new Dimension(200,50));
@@ -149,11 +145,9 @@ public class View extends JFrame implements Observer{
         confirmFlightButton = new JButton("Confirm");
         loginButton = new JButton("Login");
         buttonPanel.add(loginButton);
-        //buttonPanel.setBorder(blackLine);
         flightSelectorPanel = new JPanel(new BorderLayout());
         flightSelectorPanel.setPreferredSize(new Dimension(300, 300));
         flightSelectorPanel.setBackground(new Color(70, 89, 75));
-        //flightSelectorPanel.setBorder(blackLine);
         
         String test[] = {};
         flightList = new JList(test);
@@ -321,9 +315,7 @@ public class View extends JFrame implements Observer{
             {
                 seats[i][j] = new SeatComponent(new BorderLayout());
                 seats[i][j].setActionCommand(""+seatRow+col);
-                //seats[i][j].setText(""+seatRow+col);
                 seatGroup.add(seats[i][j]);
-                //seats[i][j].setPreferredSize(new Dimension(boxW, boxH));
                 trueSeatPanel.add(seats[i][j]);
                 this.repaint();
                 this.revalidate();
@@ -398,7 +390,7 @@ public class View extends JFrame implements Observer{
     public void updateFlightList(ArrayList list)
     {
         flightList.setListData(list.toArray());
-        System.out.println(Arrays.toString(list.toArray()));
+        //System.out.println(Arrays.toString(list.toArray()));
         this.revalidate();
         this.repaint();
     }
@@ -406,10 +398,6 @@ public class View extends JFrame implements Observer{
     public JPanel getFlightPanel()
     {
         return flightSelectorPanel;
-    }
-    
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Booking System");
     }
     
     public JButton getOkButton()
@@ -423,7 +411,7 @@ public class View extends JFrame implements Observer{
         Data data = (Data) o1;
         if(!data.loginFlag)
         {
-            System.out.println("login rejected");
+            //System.out.println("login rejected");
             this.passWordField.setText("INVALID PASSWORD");
             this.revalidate();
             this.repaint();
